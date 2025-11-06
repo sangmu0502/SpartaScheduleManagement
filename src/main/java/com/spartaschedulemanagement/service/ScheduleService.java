@@ -1,8 +1,6 @@
 package com.spartaschedulemanagement.service;
 
-import com.spartaschedulemanagement.dto.CreateScheduleRequest;
-import com.spartaschedulemanagement.dto.CreateScheduleResponse;
-import com.spartaschedulemanagement.dto.GetOneScheduleResponse;
+import com.spartaschedulemanagement.dto.*;
 import com.spartaschedulemanagement.entity.Schedule;
 import com.spartaschedulemanagement.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +70,30 @@ public class ScheduleService {
 
         // 여기서 스케쥴을 바로 return해주면 아키텍쳐 레이어에 위반된다.
         return new GetOneScheduleResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getNickname(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
+    }
+
+    // LV3. 일정 수정 service
+    @Transactional
+    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
+        );
+
+        schedule.update(
+                request.getTitle(),
+                request.getContents(),
+                request.getNickname(),
+                request.getPassword()
+        );
+
+        return new UpdateScheduleResponse(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),

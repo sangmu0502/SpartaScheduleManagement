@@ -1,8 +1,6 @@
 package com.spartaschedulemanagement.controller;
 
-import com.spartaschedulemanagement.dto.CreateScheduleRequest;
-import com.spartaschedulemanagement.dto.CreateScheduleResponse;
-import com.spartaschedulemanagement.dto.GetOneScheduleResponse;
+import com.spartaschedulemanagement.dto.*;
 import com.spartaschedulemanagement.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +39,14 @@ public class ScheduleController {
     @GetMapping("/schedules/{scheduleId}")
     public ResponseEntity<GetOneScheduleResponse> getOneSchedule(@PathVariable Long scheduleId) {
         GetOneScheduleResponse result = scheduleService.getOne(scheduleId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // LV3. 수정 컨트롤러
+    // 서버에 일정 수정을 요청할 때 비밀번호를 함께 전달해줘야한다.(Request dto에 비밀번호 필요)
+    @PutMapping("/schedules/{scheduleId}")
+    public ResponseEntity<UpdateScheduleResponse> updateSchedule(@RequestBody UpdateScheduleRequest request, @PathVariable Long scheduleId) {
+        UpdateScheduleResponse result = scheduleService.updateSchedule(scheduleId, request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
