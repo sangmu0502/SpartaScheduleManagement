@@ -102,4 +102,18 @@ public class ScheduleService {
                 schedule.getModifiedAt()
         );
     }
+
+    // LV4. 일정 삭제
+    @Transactional
+    public void delete(Long scheduleId, DeleteScheduleRequest request) {
+        boolean existence = scheduleRepository.existsByIdAndPassword(scheduleId, request.getPassword());
+
+        // 일정이 없는 경우
+        if (!existence) {
+            throw new IllegalStateException("일정이 존재하지 않거나 비밀번호가 일치하지 않습니다.");
+        }
+
+        // 일정이 있는 경우
+        scheduleRepository.deleteById(scheduleId);
+    }
 }
